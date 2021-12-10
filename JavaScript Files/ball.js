@@ -1,5 +1,5 @@
 const INITIAL_VELOCITY = 0.025;
-const VELOCITY_INCREASE = 0.00005;
+const VELOCITY_INCREASE = 0.00007;
 export default class Ball{
     constructor(ballElement){
         this.ballElement = ballElement;
@@ -34,19 +34,36 @@ export default class Ball{
             this.direction = { x: Math.cos(heading), y:Math.sin(heading)};
         }
         this.velocity = INITIAL_VELOCITY;
-        
+        this.lastIncreaseInX = 0;
+        this.lastIncreaseInY = 0;
     }
-    update(delta,barElements){
-        this.x += this.direction.x * this.velocity * delta;
-        this.y += this.direction.y * this.velocity * delta;
+    update(delta,barElements,scores){
+        if(this.lastIncrease>this.direction.x * this.velocity * delta){
+            this.x += this.lastIncreaseInX;
+            this.y += this.lastIncreaseInY;
+        }
+        else{
+            this.x += this.direction.x * this.velocity * delta;
+            this.y += this.direction.y * this.velocity * delta;
+        }
         this.velocity += VELOCITY_INCREASE;
+        this.lastIncreaseInX =  this.direction.x * this.velocity * delta; 
+        this.lastIncreaseInY =  this.direction.y * this.velocity * delta; 
         const rect = this.rect();
-
-        if(rect.bottom >= window.innerHeight || rect.top <= 0){
-            this.direction.y *= -1;
+        var windowWidth = window.innerWidth;
+        if(rect.right >= windowWidth || rect.left <= 0){
+            this.direction.x *= -1;
         }
         if(barElements.some(r => isCollision(r,rect))){
-            this.direction.x *= -1;
+            
+
+            this.direction.y *= -1;
+            if(barElements[0].top < rect.bottom){
+                scores[0].textContent = parseInt(scores[0].textContent)+1;
+            }
+            else{
+                scores[1].textContent = parseInt(scores[1].textContent)+1;
+            }
         }
     }
 }
@@ -57,9 +74,9 @@ function getRandomNumberBetween(min , max){
 
 function isCollision(rect1, rect2){
     return (
-        (rect2.left <= rect1.right) && 
-        (rect1.left <= rect2.right) &&
-        (rect1.top <= rect2.bottom) &&
-        (rect1.bottom >= rect2.top)
+        (rect2.top < rect1.bottom) && 
+        (rect1.top < rect2.bottom) &&
+        (rect1.left < rect2.left) &&
+        (rect1.right > rect2.left)
         )
 }

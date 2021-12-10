@@ -11,37 +11,40 @@ let lastTime;
 function update(time){
     if(lastTime != null){
         const delta = time-lastTime;
-        ball.update(delta,[playerBar.rect(),computerBar.rect()]);
-        computerBar.update(delta,ball.y);
+        ball.update(delta,[playerBar.rect(),computerBar.rect()],[playerScore,computerScore]);
+        computerBar.update(ball.x);
 
         if (isLose()) handleLose()
     }
     lastTime = time;
     window.requestAnimationFrame(update);
 
-
+    var windowHeight = window.innerHeight;
     document.addEventListener("mousemove", e=> {
-        playerBar.position = (e.y / window.innerHeight) * 100;
+        playerBar.position = (e.x / windowHeight) * 100;
     })
 
     function isLose(){
         const rect = ball.rect();
-        return (rect.right >= innerWidth || rect.left <= 0)
+        return (rect.bottom >= innerHeight || rect.top <= 0)
     }
 
     function handleLose(){
+       
+        const rect = ball.rect();
+        if(rect.bottom > window.innerHeight){
+            computerScore.textContent = parseInt(computerScore.textContent)+1;
+        }
+        else{
+            playerScore.textContent = parseInt(playerScore.textContent)+1;
+        }
         ball.reset();
         playerBar.reset();
         computerBar.reset();
 
-        const rect = ball.rect();
+        
 
-        if(rect.right >= innerWidth){
-            playerScore.textContent = parseInt(playerScore.textContent)+1;
-        }
-        else{
-            computerScore.textContent = parseInt(computerScore.textContent)+1;
-        }
+       
     }
 }
 

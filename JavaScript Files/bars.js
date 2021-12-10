@@ -1,3 +1,5 @@
+const SPEED = 1;
+
 export default class Bar{
     constructor(BarElem){
         this.BarElem = BarElem;
@@ -19,8 +21,8 @@ export default class Bar{
     reset(){
         this.position = 50;
     }
-    update(delta, ballHeight){
-        this.position = ballHeight;
+    update(ballDistanceFromLeft){
+        this.position += SPEED * (ballDistanceFromLeft - this.position)-3;
     }
 
 }
