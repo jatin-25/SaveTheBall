@@ -1,0 +1,70 @@
+*,*::before,*::after{
+    box-sizing: border-box;
+}
+
+:root{
+    --hue: 200;
+    --saturation: 50%;
+    --foreground-color: hsl(var(--hue),var(--saturation),75%);
+    --background-color: hsl(var(--hue),var(--saturation),20%);
+}
+body{
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    overflow: hidden;
+}
+
+.scores{
+    display: flex;
+    font-size: 4rem;
+    justify-content: center;
+    color: var(--foreground-color);
+    margin-top: 0.8rem;
+    opacity: 0.5;
+}
+
+.scores .player-score{
+    border-right: 0.2rem solid var(--foreground-color);
+    padding-right: 0.8rem;
+    text-align: right;
+}
+
+.scores .computer-score{
+    padding-left: 0.8rem;
+}
+
+.scores > *{
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.bars{
+    --position: 50;
+    position: absolute;
+    background-color: var(--foreground-color);
+    height: 12vh;
+    width: 1.1vh;
+    top: calc(var(--position)*1vh);
+    transform: translateY(-50%);
+}
+.bars.player-bar{
+    left: 0.3vw;
+
+}
+.bars.computer-bar{
+    right: 0.3vw;
+}
+
+.ball{
+    --x:50;
+    --y:50;
+    position: absolute;
+    background-color: var(--foreground-color);
+    height: 2.5vh;
+    width: 2.5vh;
+    top: calc(var(--y)*1vh);
+    left: calc(var(--x)*1vw);
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+}
