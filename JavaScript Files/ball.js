@@ -54,29 +54,32 @@ export default class Ball{
         if(rect.right >= windowWidth || rect.left <= 0){
             this.direction.x *= -1;
         }
-        if(barElements.some(r => isCollision(r,rect))){
-            
-
+        var i = 0;
+        if(barElements.some(r => isCollision(r,rect,scores,i++))){
             this.direction.y *= -1;
-            if(barElements[0].top < rect.bottom){
-                scores[0].textContent = parseInt(scores[0].textContent)+1;
-            }
-            else{
-                scores[1].textContent = parseInt(scores[1].textContent)+1;
-            }
         }
+        
+
     }
 }
-
 function getRandomNumberBetween(min , max){
     return Math.random() * (max-min) + min;
 }
 
-function isCollision(rect1, rect2){
-    return (
-        (rect2.top < rect1.bottom) && 
-        (rect1.top < rect2.bottom) &&
-        (rect1.left < rect2.left) &&
-        (rect1.right > rect2.left)
-        )
+function isCollision(rect1, rect2,scores,i){
+    var isCollided = false;
+    var isBetweenBars = (rect1.left < rect2.left) && (rect1.right > rect2.right);
+    console.log(isBetweenBars);
+    if(isBetweenBars){
+        if(rect2.top <= rect1.bottom + 3 && i == 1){
+            scores[1].textContent = parseInt(scores[1].textContent)+1;
+            isCollided = true;
+        }
+        else if(rect1.top <= rect2.bottom + 3 && i == 0){
+            scores[0].textContent = parseInt(scores[0].textContent)+1;
+            isCollided = true;
+
+        }
+    }
+    return isCollided;
 }
