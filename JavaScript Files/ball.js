@@ -69,7 +69,6 @@ function getRandomNumberBetween(min , max){
 function isCollision(rect1, rect2,scores,i){
     var isCollided = false;
     var isBetweenBars = (rect1.left < rect2.left) && (rect1.right > rect2.right);
-    console.log(isBetweenBars);
     if(isBetweenBars){
         if(rect2.top <= rect1.bottom + 3 && i == 1){
             scores[1].textContent = parseInt(scores[1].textContent)+1;
